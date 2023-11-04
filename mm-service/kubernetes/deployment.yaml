@@ -19,22 +19,10 @@ spec:
         - name: mm-service
           image: mahendraintelops/mm-project/mm-service
           imagePullPolicy: Always
-        
-          env:
-            - name: SERVICE_NAME
-              value: "go-app"
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "localhost:4317"
-            - name: INSECURE_MODE
-              value: "true"
-        
+       
           ports:
-        
-        
-          - containerPort: 8080
-            name: http
-        
-        
+            - containerPort: 8080
+              name: http
           readinessProbe:
             tcpSocket:
               port: http

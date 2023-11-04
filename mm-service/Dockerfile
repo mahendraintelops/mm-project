@@ -1,35 +1,19 @@
-################ Build & Dev ################
-# Build stage will be used:
-# - for building the application for production
-FROM golang:1.20.2-alpine3.17 as build
+FROM node:18.15-alpine
 
-# Create project directory (workdir)
+# Set working directory
 WORKDIR /app
 
-# Copy source code files to WORKDIR
+# Add package.json to WORKDIR and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Add source code files to WORKDIR
 COPY . .
-
-# Build application
-RUN go mod tidy && go build -ldflags '-s -w' -o main .
-
-# Container start command for development
-CMD ["go", "run", "main.go"]
-
-
-################ Production ################
-# Creates a minimal image for production using distroless base image
-# More info here: https://github.com/GoogleContainerTools/distroless
-FROM gcr.io/distroless/base-debian11:nonroot as production
-
-# Copy application binary from build/dev stage to the distroless container
-COPY --from=build /app/main /
 
 
 # Application port (optional)
 EXPOSE 8080
 
 
-
-
-# Container start command for production
-CMD ["/main"]
+# Container start command (DO NOT CHANGE and see note below)
+CMD ["npm", "start"]
